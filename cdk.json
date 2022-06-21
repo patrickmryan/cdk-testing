@@ -15,6 +15,10 @@
     ]
   },
   "context": {
+    "PermissionsBoundaryPolicyArn": "arn:aws:iam::458358814065:policy/T_PROJADMIN_U",
+    "BucketName": "pmr-cdk-testing-bucket",
+    "LambdaRoleArn": "arn:aws:iam::458358814065:role/TestLambdaRole",
+    
     "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
     "@aws-cdk/core:stackRelativeExports": true,
     "@aws-cdk/aws-rds:lowercaseDbIdentifier": true,
