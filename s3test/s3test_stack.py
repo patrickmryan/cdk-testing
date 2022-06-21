@@ -28,7 +28,7 @@ class S3TestStack(Stack):
         lambda_role_arn = self.node.try_get_context("LambdaRoleArn")
 
         # lambda_role = iam.Role.from_role_name(self, "DefaultLambdaRole", "TestLambdaRole")
-        lambda_role = iam.Role.from_role_arn(
+        role = iam.Role.from_role_arn(
             self,
             "DefaultLambdaRole",
             lambda_role_arn,
@@ -37,13 +37,15 @@ class S3TestStack(Stack):
             mutable=False,
         )
 
+        arn=self.format_arn(service="s3", resource=bucket_name)
         test_bucket = s3.Bucket.from_bucket_attributes(
             self,
             "TestBucket",
             # bucket_arn='arn:aws:s3:::pmr-cdk-testing-bucket'
-            bucket_arn=self.format_arn(service="s3", resource=bucket_name),
-            notifications_handler_role=lambda_role
+            bucket_arn=arn,   #self.format_arn(service="s3", resource=bucket_name),
+            # notifications_handler_role=lambda_role
         )
+        print(self.resolve(arn))
 
         test_topic = sns.Topic(self, "TestTopic")
         test_bucket.add_event_notification(
@@ -56,7 +58,7 @@ class S3TestStack(Stack):
             code=_lambda.Code.from_asset("lambda"),
             runtime=_lambda.Runtime.PYTHON_3_8,
             handler="handler.lambda_handler",
-            role=lambda_role,
+            role=role,
         )
 
         test_topic.add_subscription(subscriptions.LambdaSubscription(handler))
