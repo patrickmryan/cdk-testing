@@ -37,15 +37,17 @@ class S3TestStack(Stack):
             mutable=False,
         )
 
-        arn=self.format_arn(service="s3", resource=bucket_name)
+        # arn=self.format_arn(service="s3", resource=bucket_name)
+        arn='arn:aws:s3:::'+bucket_name
         test_bucket = s3.Bucket.from_bucket_attributes(
             self,
             "TestBucket",
             # bucket_arn='arn:aws:s3:::pmr-cdk-testing-bucket'
-            bucket_arn=arn,   #self.format_arn(service="s3", resource=bucket_name),
+            bucket_arn=arn,
+            #self.format_arn(service="s3", resource=bucket_name),
             # notifications_handler_role=lambda_role
         )
-        print(self.resolve(arn))
+        # print(self.resolve(arn))
 
         test_topic = sns.Topic(self, "TestTopic")
         test_bucket.add_event_notification(
